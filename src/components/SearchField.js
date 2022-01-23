@@ -1,31 +1,19 @@
 import React from 'react'
 import {useState} from 'react'
-import {useDispatch,useSelector} from 'react-redux';
 import { HiX } from "react-icons/hi";
-import searchRepositories from '../store/action-creators';
-
 import {useNavigate} from 'react-router-dom';
+import Typical from 'react-typical';
 
 function SearchField() {
 
     let navigate = useNavigate();
-
     const [display, setDisplay] = useState(false)
-
-
     const [term, setTerm] = useState("");
-    const dispatch = useDispatch();
-    const {loading,data,error} = useSelector(state => state.repositories);
-    console.log(data);
+    
 
     const onSubmitHandler = e=>{
-        console.log('selamlar');
-        console.log(term);
         e.preventDefault();
-        navigate(`/q/${term}`);
-        
-        
-        // dispatch(searchRepositories(term));
+        navigate(`/query/${term}`);    
     }
 
     const onChangeHandler = e=>{
@@ -51,10 +39,17 @@ function SearchField() {
     return (
         <div className='w-screen h-screen flex justify-center items-center'>
             <form className='w-3/5 flex justify-center items-center flex-col' onSubmit={(e)=>onSubmitHandler(e)}>
-                <h1 className='mb-10'>NPMGO</h1>
+                <h1 className='mb-10 text-default-text text-xl'>NPM
+                <Typical
+                    loop={Infinity}
+                    wrapper='b'
+                    steps={['GO',1000,'SEARCH',1000,'FIND',1000]}
+                />
+                
+                </h1>
                 <div className='flex w-3/5'>
                     <div className='relative w-full'>
-                        <input className='search-input bg-default-inputColor text-default-whitely py-2 px-4 w-full h-14 rounded-md [outline:0]' type="text" placeholder='Search for npm packages' onChange={(e)=>onChangeHandler(e.target)}/>
+                        <input className='search-input bg-default-inputColor text-default-whitely py-2 px-4 w-full h-14 rounded-md [outline:0]' type="text" placeholder='Search for npm packages' onChange={(e)=>onChangeHandler(e.target)} required/>
                         {display && <span className='bg-default-inputColor absolute h-full p-2 right-0 inline-block rounded-tr-md rounded-br-md cursor-pointer' onClick={()=>onClickHandler()}><HiX className='h-full' size={'1.2rem'} color='white'/></span>}
                     </div>
                     {/* <button className='bg-default-inputColor p-2'><HiSearch size={'1.5rem'} color='white'/></button> */}
