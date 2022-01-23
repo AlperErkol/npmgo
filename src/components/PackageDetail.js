@@ -215,11 +215,11 @@ function PackageDetail() {
                     </div>
                     <div className="search-type mb-4">
                         <label className='flex mb-2' htmlFor="single">
-                            <input className='mr-2' type="radio" name="type" id="single" />
+                            <input className='customRadioButton mr-2 relative' type="radio" name="type" id="single" />
                             <p className='text-default-text text-sm font-semibold'>Single Day</p>
                         </label>
                         <label className='flex' htmlFor="multiple">
-                            <input className='mr-2' type="radio" name="type" id="multiple" />
+                            <input className='customRadioButton mr-2 relative' type="radio" name="type" id="multiple" />
                             <p className='text-default-text text-sm font-semibold'>Day Interval</p>
                         </label>
                     </div>
