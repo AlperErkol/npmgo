@@ -1,25 +1,33 @@
-import React from 'react'
-import { useEffect } from 'react';
-import {useParams} from 'react-router-dom';
-import {searchPackages, getPackageDetail} from '../store/action-creators';
+import React, { useState, useEffect } from 'react'
+import {useParams, useLocation} from 'react-router-dom';
 import {useDispatch,useSelector} from 'react-redux';
-import { useLocation } from 'react-router-dom';
-import {BarChart, Bar, Tooltip, Legend, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Line, LineChart} from 'recharts';
-import { useState } from 'react';
+import {searchPackages, getPackageDetail} from '../store/action-creators';
+
+// Icons
 import { GoLinkExternal } from "react-icons/go";
+import { ImSpinner9 } from "react-icons/im";
+import { MdKeyboardArrowRight } from "react-icons/md";
+
+
+import {BarChart, Bar, Tooltip, Legend, XAxis, YAxis, ResponsiveContainer, Line, LineChart} from 'recharts';
+import Alert from './subComponents/Alert';
 
 function PackageDetail() {
 
     const location = useLocation();
-    const packageDetail = location.state.packageDetails;
     const dispatch = useDispatch();
+    const packageDetail = location.state.packageDetails;
     const {loading,data,error} = useSelector(state => state.packages);
-    const {loadingDetail, dataDetail, errorDetail} = useSelector(state => state.details);
+    // const {loadingDetail, dataDetail, errorDetail} = useSelector(state => state.details);
     const params = useParams();
+
+
     const [scores,setScores] = useState(null);
     const [downloadCount, setDownloadCount] = useState([]);
-
     const [searchType, setSearchType] = useState('initial');
+
+    const [errorTo, setErrorTo] = useState('false');
+    const [errorFrom, setErrorFrom] = useState('false');
 
 
 
@@ -86,30 +94,40 @@ function PackageDetail() {
 
     const onChangeHandler = e =>{
 
+        console.log(e.target);
+
         if(e.target.value === ""){
-            document.querySelector('#endDate').value = "";
+            
+            if(searchType !== 'single'){
+                document.querySelector('#endDate').value = "";
+            }
+
         }else{
 
-            let chosenDate = e.target.value;
-            let threshold = new Date(chosenDate);
-            threshold.setDate(threshold.getDate() + 1);
-            let minDate = threshold.toISOString().split('T')[0];
-            document.querySelector('#endDate').setAttribute('min',minDate);
-            document.querySelector('#endDate').value = "";
+            if(searchType !== 'single'){
+                let chosenDate = e.target.value;
+                let threshold = new Date(chosenDate);
+                threshold.setDate(threshold.getDate() + 1);
+                let minDate = threshold.toISOString().split('T')[0];
+                document.querySelector('#endDate').setAttribute('min',minDate);
+                document.querySelector('#endDate').value = "";
+            }
+            
         }
     };
 
     const onClickHandler = _ =>{
 
+        console.log(searchType);
         let startDate = document.querySelector('#startDate').value;
-        setSearchType('single');
-        dispatch(searchPackages(params.packageName,searchType,startDate));
-
+        // setSearchType('single');
+        // dispatch(searchPackages(params.packageName,searchType,startDate));
 
     };
     
-
-    
+    const onChangeHandlerRadio = e =>{
+        setSearchType(e.target.id);
+    };
 
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
@@ -142,7 +160,7 @@ function PackageDetail() {
                     </div>
                     <div className='mr-8 flex h-full flex-col '>
                         <span className='text-default-muted text-sm'>Version</span>
-                        <p className='text-default-text'>{dataDetail && dataDetail.license}</p>
+                        <p className='text-default-text'>{"MIT"}</p>
                     </div>
                     <div className='mr-8 flex h-full flex-col '>
                         <span className='text-default-muted text-sm'>Published Date</span>
@@ -213,29 +231,50 @@ function PackageDetail() {
                         <p className='text-sm font-semibold p-1 text-default-text'>You can see download count of <b className='text-default-tertiary'>{params.packageName}</b> by adjusting settings. Default, download count of yesterday shown below.</p>
                         
                     </div>
-                    <div className="search-type mb-4">
-                        <label className='flex mb-2' htmlFor="single">
-                            <input className='customRadioButton mr-2 relative' type="radio" name="type" id="single" />
-                            <p className='text-default-text text-sm font-semibold'>Single Day</p>
+                    <div className="search-type text-default-text text-sm font-semibold mb-4">
+                        <label className='radio__label flex items-center mb-2' htmlFor="single">
+                            <input className='mr-2' type="radio" name="type" id="single" onChange={(e)=>onChangeHandlerRadio(e)} />
+                            <div className="radio"></div>
+                            Single Day
                         </label>
-                        <label className='flex' htmlFor="multiple">
-                            <input className='customRadioButton mr-2 relative' type="radio" name="type" id="multiple" />
-                            <p className='text-default-text text-sm font-semibold'>Day Interval</p>
+                        
+                        <label className='radio__label flex items-center' htmlFor="multiple">
+                            <input className='mr-2' type="radio" name="type" id="multiple"  onChange={(e)=>onChangeHandlerRadio(e)} />
+                            <div className="radio"></div>
+                            Day Interval
                         </label>
+                        
                     </div>
-                    <div className="right-header flex justify-between mb-8">
-                        <div className='flex flex-col w-2/5 mr-2'>
-                            <span className='text-default-text mb-1'>from 🕒</span>
-                            <input className='w-full h-8' type="date" id="startDate" onChange={(e)=>onChangeHandler(e)} />
-                        </div>
-                        <div className='flex flex-col w-2/5 mr-2'>
-                            <span className='text-default-text mb-1'>to 🕕</span>
-                            <input className='w-full h-8' type="date" id="endDate" />
-                        </div>
-                        <button onClick={()=>onClickHandler()} className='w-1/5 bg-default-secondary text-sm font-semibold p-3 rounded-3xl hover:bg-default-buttonHover hover:text-default-text ease-in duration-100'>SEARCH</button>
+                    
+                    <div className="right-header flex mb-8 items-end">
+                        {searchType && (searchType === 'initial' || searchType === 'multiple' )&&
+                        <div className='flex flex-1'>
+                            <div className='flex flex-col flex-1 mr-2'>
+                                <span className='text-default-text mb-3'>from 🕒 <Alert message={"Please select a date!"}/> </span>
+                                <input className='w-full h-8' type="date" id="startDate" onChange={(e)=>onChangeHandler(e)} />
+                                
+                            </div>
+                            <div className='flex flex-col flex-1 mr-2'>
+                                <span className='text-default-text mb-3'>to 🕕 <Alert message={"Please select a date!"}/> </span>
+                                <input className='w-full h-8' type="date" id="endDate" />
+                            </div>
+                        </div> 
+                        }
+                        {
+                            searchType && searchType === 'single' && 
+                            <div className='flex flex-col flex-1 mr-2'>
+                                <span className='text-default-text mb-3'>date 🕒 <Alert message={"Please select a date!"}/></span>
+                                <input className='w-full h-8' type="date" id="startDate" onChange={(e)=>onChangeHandler(e)} />
+                            </div>
+                        }
+                        <button 
+                            onClick={()=>onClickHandler()} 
+                            className='group w-12 h-8 flex items-center justify-center border-solid border-2 border-default-text hover:bg-default-text ease-in duration-100'>
+                            <MdKeyboardArrowRight size={24} className='text-default-text group-hover:text-default-inputColor'/>
+                        </button>
                     </div>
                     <div className="chart w-full h-96">
-                        { data && downloadCount && <ResponsiveContainer width="100%" height="100%">
+                        { !loading && data && downloadCount && <ResponsiveContainer width="100%" height="100%">
                             <LineChart
                                 width={400}
                                 height={400}
@@ -248,6 +287,10 @@ function PackageDetail() {
                                 <Line  dataKey="downloads" stroke="#8884d8"/>
                             </LineChart>
                         </ResponsiveContainer>}
+                        {loading && 
+                        <div className='w-full h-full flex items-center justify-center'>
+                            <ImSpinner9 size={32} className='text-default-text animate-spin'/>
+                        </div>}
                     </div>
                     
                 </div>
