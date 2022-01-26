@@ -91,7 +91,7 @@ export const searchPackages = (packageName, type, startDate = null ,endDate = nu
                 const {data} = await axios.get(`https://api.npmjs.org/downloads/range/${startDate}:${endDate}/${packageName}`);
                 tempData = data.downloads;
             }
-
+            console.log('alpererkol');
             console.log(tempData);
 
             dispatch({

@@ -8,14 +8,11 @@ function App() {
   return (
     <Router>
       <div className="App max-w-screen min-h-screen bg-default-primary">
-        <div className='relative inline'>
             <Routes>
               <Route exact path="/" element={<SearchField />} />
               <Route exact path="/query/:term" element={<Result />} />
               <Route exact path="/package/:packageName" element={<PackageDetail />} />
             </Routes>
-            <HelperField/>
-        </div>
       </div>
     </Router>
   );

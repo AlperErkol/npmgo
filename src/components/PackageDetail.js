@@ -26,8 +26,12 @@ function PackageDetail() {
     const [downloadCount, setDownloadCount] = useState([]);
     const [searchType, setSearchType] = useState('initial');
 
-    const [errorTo, setErrorTo] = useState('false');
-    const [errorFrom, setErrorFrom] = useState('false');
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+
+
+    const [errorTo, setErrorTo] = useState(false);
+    const [errorFrom, setErrorFrom] = useState(false);
 
 
 
@@ -94,15 +98,23 @@ function PackageDetail() {
 
     const onChangeHandler = e =>{
 
-        console.log(e.target);
+        
 
         if(e.target.value === ""){
             
             if(searchType !== 'single'){
                 document.querySelector('#endDate').value = "";
+                setEndDate("");
             }
 
         }else{
+
+            if(e.target.id === "startDate"){
+                setStartDate(e.target.value);
+            }else if (e.target.id === "endDate"){
+                setEndDate(e.target.value);
+            }
+
 
             if(searchType !== 'single'){
                 let chosenDate = e.target.value;
@@ -110,7 +122,7 @@ function PackageDetail() {
                 threshold.setDate(threshold.getDate() + 1);
                 let minDate = threshold.toISOString().split('T')[0];
                 document.querySelector('#endDate').setAttribute('min',minDate);
-                document.querySelector('#endDate').value = "";
+                
             }
             
         }
@@ -119,9 +131,15 @@ function PackageDetail() {
     const onClickHandler = _ =>{
 
         console.log(searchType);
-        let startDate = document.querySelector('#startDate').value;
-        // setSearchType('single');
-        // dispatch(searchPackages(params.packageName,searchType,startDate));
+        
+        
+        if(searchType === "single"){
+            dispatch(searchPackages(params.packageName,searchType,startDate));
+        }
+        else if (searchType === "multiple"){
+            dispatch(searchPackages(params.packageName,searchType,startDate,endDate));
+        }
+
 
     };
     
@@ -239,7 +257,7 @@ function PackageDetail() {
                         </label>
                         
                         <label className='radio__label flex items-center' htmlFor="multiple">
-                            <input className='mr-2' type="radio" name="type" id="multiple"  onChange={(e)=>onChangeHandlerRadio(e)} />
+                            <input className='mr-2' type="radio" name="type" id="multiple" onChange={(e)=>onChangeHandlerRadio(e)} />
                             <div className="radio"></div>
                             Day Interval
                         </label>
@@ -250,20 +268,21 @@ function PackageDetail() {
                         {searchType && (searchType === 'initial' || searchType === 'multiple' )&&
                         <div className='flex flex-1'>
                             <div className='flex flex-col flex-1 mr-2'>
-                                <span className='text-default-text mb-3'>from 🕒 <Alert message={"Please select a date!"}/> </span>
+                                <span className='text-default-text mb-3'>from 🕒 {errorFrom && errorFrom && <Alert message={"Please select a date!"}/>} </span>
                                 <input className='w-full h-8' type="date" id="startDate" onChange={(e)=>onChangeHandler(e)} />
                                 
                             </div>
                             <div className='flex flex-col flex-1 mr-2'>
-                                <span className='text-default-text mb-3'>to 🕕 <Alert message={"Please select a date!"}/> </span>
-                                <input className='w-full h-8' type="date" id="endDate" />
+                                <span className='text-default-text mb-3'>to 🕕 {errorTo && !errorTo && <Alert message={"Please select a date!"}/>} </span>
+                                <input className='w-full h-8' type="date" id="endDate" onChange={(e)=>onChangeHandler(e)} />
+                                
                             </div>
                         </div> 
                         }
                         {
                             searchType && searchType === 'single' && 
                             <div className='flex flex-col flex-1 mr-2'>
-                                <span className='text-default-text mb-3'>date 🕒 <Alert message={"Please select a date!"}/></span>
+                                <span className='text-default-text mb-3'>date 🕒 {errorFrom && errorFrom && <Alert message={"Please select a date!"}/>} </span>
                                 <input className='w-full h-8' type="date" id="startDate" onChange={(e)=>onChangeHandler(e)} />
                             </div>
                         }
