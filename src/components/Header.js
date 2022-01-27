@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { HiX } from "react-icons/hi";
-import {useDispatch,useSelector} from 'react-redux';
+// import {useDispatch,useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 
 
@@ -11,7 +11,7 @@ function Header() {
     const [display, setDisplay] = useState(false)
 
     const [term, setTerm] = useState("");
-    
+
     const onChangeHandler = e=>{
 
         setTerm(e.value);

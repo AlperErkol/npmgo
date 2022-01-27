@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {useParams, useLocation} from 'react-router-dom';
 import {useDispatch,useSelector} from 'react-redux';
-import {searchPackages, getPackageDetail} from '../store/action-creators';
+import {searchPackages} from '../store/action-creators';
 
 // Icons
 import { GoLinkExternal } from "react-icons/go";
@@ -11,6 +11,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 
 import {BarChart, Bar, Tooltip, Legend, XAxis, YAxis, ResponsiveContainer, Line, LineChart} from 'recharts';
 import Alert from './subComponents/Alert';
+import HelperField from './HelperField';
 
 function PackageDetail() {
 
@@ -38,13 +39,13 @@ function PackageDetail() {
     const scoresTemp = [];
 
     useEffect(() => {
-        
+
         // dispatch(getPackageDetail(params.packageName,searchType));
         dispatch(searchPackages(params.packageName,searchType));
-        
+
 
         let scoreItem = {};
-        Object.keys(packageDetail.score.detail).map(key =>{
+        Object.keys(packageDetail.score.detail).map(key => {
             scoreItem.name = key;
             scoreItem.value = packageDetail.score.detail[key];
             scoresTemp.push(scoreItem);
@@ -55,8 +56,8 @@ function PackageDetail() {
         getDate();
 
         setDownloadCount(data);
-        
-        
+
+
     }, [])
 
 
@@ -98,10 +99,10 @@ function PackageDetail() {
 
     const onChangeHandler = e =>{
 
-        
+
 
         if(e.target.value === ""){
-            
+
             if(searchType !== 'single'){
                 document.querySelector('#endDate').value = "";
                 setEndDate("");
@@ -122,17 +123,17 @@ function PackageDetail() {
                 threshold.setDate(threshold.getDate() + 1);
                 let minDate = threshold.toISOString().split('T')[0];
                 document.querySelector('#endDate').setAttribute('min',minDate);
-                
+
             }
-            
+
         }
     };
 
     const onClickHandler = _ =>{
 
         console.log(searchType);
-        
-        
+
+
         if(searchType === "single"){
             dispatch(searchPackages(params.packageName,searchType,startDate));
         }
@@ -142,7 +143,7 @@ function PackageDetail() {
 
 
     };
-    
+
     const onChangeHandlerRadio = e =>{
         setSearchType(e.target.id);
     };
@@ -161,8 +162,10 @@ function PackageDetail() {
 
 
     return (
+
         <div className='pl-20 py-12 pr-36'>
-            <div className='mb-3 flex justify-between border-b-2 border-default-muted h-20'>
+			<HelperField/>
+            <div className='mt-3 mb-3 flex justify-between border-b-2 border-default-muted h-20'>
                 <div>
                     <h1 className='inline text-5xl text-default-text mr-2'>{packageDetail.package.name}</h1>
                     <span className='text-default-text'>by {packageDetail.package.publisher.username}</span>
@@ -184,10 +187,10 @@ function PackageDetail() {
                         <span className='text-default-muted text-sm'>Published Date</span>
                         <p className='text-default-text'>{getDate()}</p>
                     </div>
-                    
+
                 </div>
             </div>
-            
+
             <div className="body flex">
                 <div className="left flex-1 w-full h-full py-4">
                     <div className='mb-4'>
@@ -201,7 +204,7 @@ function PackageDetail() {
                             <h3 className='text-lg font-bold text-default-whitely'>Keywords</h3>
                         </div>
                         <ul className="keywords mt-2">
-                                {packageDetail.package.keywords && packageDetail.package.keywords.map(keyword => 
+                                {packageDetail.package.keywords && packageDetail.package.keywords.map(keyword =>
                                     <li className='text-sm inline-block py-1 px-2 mr-2 mb-2 bg-default-tertiary text-default-whitely rounded'>{keyword}</li>
                                 )}
                         </ul>
@@ -231,14 +234,14 @@ function PackageDetail() {
                         {Object.keys(packageDetail.package.links).map(key => {
                             return(
                                 <div className='py-1'>
-                                    <a className='text-sm font-semibold text-default-text inline-flex items-center' href={packageDetail.package.links[key]} target="_blank">
+                                    <a className='text-sm font-semibold text-default-text inline-flex items-center' href={packageDetail.package.links[key]} target="_blank" rel='noreferrer'>
                                         {key}
                                         <GoLinkExternal className='ml-1'/>
                                     </a>
                                 </div>
                             );
                         })}
-                        
+
                     </div>
                 </div>
                 <div className="right flex-1 w-full h-full py-4">
@@ -247,7 +250,7 @@ function PackageDetail() {
                             <h3 className='text-lg font-bold text-default-whitely'>Download Count</h3>
                         </div>
                         <p className='text-sm font-semibold p-1 text-default-text'>You can see download count of <b className='text-default-tertiary'>{params.packageName}</b> by adjusting settings. Default, download count of yesterday shown below.</p>
-                        
+
                     </div>
                     <div className="search-type text-default-text text-sm font-semibold mb-4">
                         <label className='radio__label flex items-center mb-2' htmlFor="single">
@@ -255,39 +258,39 @@ function PackageDetail() {
                             <div className="radio"></div>
                             Single Day
                         </label>
-                        
+
                         <label className='radio__label flex items-center' htmlFor="multiple">
                             <input className='mr-2' type="radio" name="type" id="multiple" onChange={(e)=>onChangeHandlerRadio(e)} />
                             <div className="radio"></div>
                             Day Interval
                         </label>
-                        
+
                     </div>
-                    
+
                     <div className="right-header flex mb-8 items-end">
                         {searchType && (searchType === 'initial' || searchType === 'multiple' )&&
                         <div className='flex flex-1'>
                             <div className='flex flex-col flex-1 mr-2'>
                                 <span className='text-default-text mb-3'>from 🕒 {errorFrom && errorFrom && <Alert message={"Please select a date!"}/>} </span>
                                 <input className='w-full h-8' type="date" id="startDate" onChange={(e)=>onChangeHandler(e)} />
-                                
+
                             </div>
                             <div className='flex flex-col flex-1 mr-2'>
                                 <span className='text-default-text mb-3'>to 🕕 {errorTo && !errorTo && <Alert message={"Please select a date!"}/>} </span>
                                 <input className='w-full h-8' type="date" id="endDate" onChange={(e)=>onChangeHandler(e)} />
-                                
+
                             </div>
-                        </div> 
+                        </div>
                         }
                         {
-                            searchType && searchType === 'single' && 
+                            searchType && searchType === 'single' &&
                             <div className='flex flex-col flex-1 mr-2'>
                                 <span className='text-default-text mb-3'>date 🕒 {errorFrom && errorFrom && <Alert message={"Please select a date!"}/>} </span>
                                 <input className='w-full h-8' type="date" id="startDate" onChange={(e)=>onChangeHandler(e)} />
                             </div>
                         }
-                        <button 
-                            onClick={()=>onClickHandler()} 
+                        <button
+                            onClick={()=>onClickHandler()}
                             className='group w-12 h-8 flex items-center justify-center border-solid border-2 border-default-text hover:bg-default-text ease-in duration-100'>
                             <MdKeyboardArrowRight size={24} className='text-default-text group-hover:text-default-inputColor'/>
                         </button>
@@ -306,12 +309,12 @@ function PackageDetail() {
                                 <Line  dataKey="downloads" stroke="#8884d8"/>
                             </LineChart>
                         </ResponsiveContainer>}
-                        {loading && 
+                        {loading &&
                         <div className='w-full h-full flex items-center justify-center'>
                             <ImSpinner9 size={32} className='text-default-text animate-spin'/>
                         </div>}
                     </div>
-                    
+
                 </div>
             </div>
         </div>

@@ -7,6 +7,8 @@
 *{
   margin: 0;
   padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
   font-family: 'Roboto Mono', monospace;
 }
@@ -19,7 +21,7 @@
   width: 1.25rem;
   height: 1.25rem;
   background-color: white;
-  border-radius: 1.25rem;
+  border-radius: 50%;
   padding: 0.2rem;
   margin-right:0.5rem;
   cursor: pointer;
@@ -92,4 +94,16 @@ aside.active{
 
 .overlay.active{
   transform: scale(1);
+}
+
+.toggle-theme{
+	position: absolute;
+	transition: all 150ms ease-in-out;
+}
+
+.toggle-theme.active{
+	left: 0rem;
+}
+.toggle-theme.inactive{
+	left: -20rem;
 }

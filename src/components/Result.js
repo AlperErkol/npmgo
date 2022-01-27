@@ -5,30 +5,30 @@ import searchRepositories from '../store/action-creators';
 import Header from './Header';
 import { useState } from 'react';
 
-function Result({}) {
-    
+function Result() {
+
     const params = useParams();
     const dispatch = useDispatch();
     const [term, setTerm] = useState("");
     const {loading,data,error} = useSelector(state => state.repositories);
-    
+
     const addToHistory = (term) =>{
         let historyList = JSON.parse(localStorage.getItem('history')) || [];
         let index = historyList.indexOf(term);
-        if(index != -1){
+        if(index !== -1){
             historyList.splice(index,1);
         }
         historyList.push(term);
         localStorage.setItem('history',JSON.stringify(historyList));
     };
 
-    
+
     useEffect(() => {
         console.log('selam..');
         let historyList = JSON.parse(localStorage.getItem('history')) || [];
-        let index = historyList.indexOf(term);
+        // let index = historyList.indexOf(term);
 
-        if(historyList[historyList.length -1] != params.term){
+        if(historyList[historyList.length -1] !== params.term){
 
             if(params.term !== term){
                 dispatch(searchRepositories(params.term));
@@ -38,16 +38,14 @@ function Result({}) {
 
         }
 
-        
-
     }, [params.term])
-    
-    
+
+
     return (
         <div>
             <Header/>
             <div className='max-w-screen-md pl-40 pr-40 overflow-hidden'>
-                {!error && !loading && data.map(repositories => 
+                {!error && !loading && data.map(repositories =>
                 <Link to={`/package/${repositories.package.name}`} state={{packageDetails : repositories}}>
                     <div className='group relative mb-8 last:mb-0 py-4 flex justify-between flex-col cursor-pointer'>
                         <div className="flex items-center">
@@ -61,28 +59,28 @@ function Result({}) {
                             </div>
                             <span className='text-sm text-default-muted'>{repositories.package.description}</span>
                             <ul className="keywords mt-2">
-                                {repositories.package.keywords && repositories.package.keywords.map(keyword => 
+                                {repositories.package.keywords && repositories.package.keywords.map(keyword =>
                                     <li className='text-sm inline-block py-1 px-2 mr-2 mb-2 bg-default-tertiary text-default-whitely rounded'>{keyword}</li>
-                                    
-                                    
+
+
                                 )}
                             </ul>
                         </div>
                     </div>
                 </Link>
                 )}
-                { loading && 
-                <div class="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
-                    <div class="animate-pulse flex space-x-4">
-                    <div class="rounded-full bg-slate-700 h-10 w-10"></div>
-                    <div class="flex-1 space-y-6 py-1">
-                        <div class="h-2 bg-slate-700 rounded"></div>
-                        <div class="space-y-3">
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="h-2 bg-slate-700 rounded col-span-2"></div>
-                            <div class="h-2 bg-slate-700 rounded col-span-1"></div>
+                { loading &&
+                <div className="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
+                    <div className="animate-pulse flex space-x-4">
+                    <div className="rounded-full bg-slate-700 h-10 w-10"></div>
+                    <div className="flex-1 space-y-6 py-1">
+                        <div className="h-2 bg-slate-700 rounded"></div>
+                        <div className="space-y-3">
+                        <div className="grid grid-cols-3 gap-4">
+                            <div className="h-2 bg-slate-700 rounded col-span-2"></div>
+                            <div className="h-2 bg-slate-700 rounded col-span-1"></div>
                         </div>
-                        <div class="h-2 bg-slate-700 rounded"></div>
+                        <div className="h-2 bg-slate-700 rounded"></div>
                         </div>
                     </div>
                     </div>

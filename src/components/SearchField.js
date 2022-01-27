@@ -11,11 +11,11 @@ function SearchField() {
     let navigate = useNavigate();
     const [display, setDisplay] = useState(false)
     const [term, setTerm] = useState("");
-    
+
 
     const onSubmitHandler = e=>{
         e.preventDefault();
-        navigate(`/query/${term}`);    
+        navigate(`/query/${term}`);
     }
 
     const onChangeHandler = e=>{
@@ -36,7 +36,7 @@ function SearchField() {
         searchInput.value = "";
         setDisplay(false);
     }
-    
+
 
     return (
         <div className='w-screen h-screen'>
@@ -56,11 +56,11 @@ function SearchField() {
                         1500
                     ]}
 
-                    
+
                     />
-                        
-                    
-                    
+
+
+
                     </span>
                     <div className='flex w-3/5'>
                         <div className='input-area relative w-full'>
@@ -73,14 +73,8 @@ function SearchField() {
             </main>
             <Footer/>
         </div>
-        
+
     )
 }
 
 export default SearchField;
-
-                {/* <Typical
-                    loop={Infinity}
-                    wrapper='b'
-                    steps={['GO',1000,'SEARCH',1000,'FIND',1000]}
-                /> */}

@@ -1,5 +1,4 @@
 import axios from "axios";
-import {getRawAbbreviatedPackument } from 'query-registry';
 
 
 const searchRepositories = term =>{
@@ -9,11 +8,11 @@ const searchRepositories = term =>{
         dispatch({
             type: 'SEARCH_REPOSITORIES'
         })
-        
+
         try {
 
             const {data} = await axios.get('https://registry.npmjs.org/-/v1/search?text='+term);
-            
+
             const names = data.objects.map((result)=>{
                 return result;
             });
@@ -23,7 +22,7 @@ const searchRepositories = term =>{
                 payload : names
             })
 
-            
+
         } catch (error) {
             dispatch({
                 type: 'SEARCH_REPOSITORIES_ERROR',
@@ -41,10 +40,10 @@ export const getPackageDetail = packageName => {
         dispatch({
             type: 'GET_PACKAGES'
         })
-        
+
         try {
 
-            
+
             const {data} = await axios.get("https://registry.npmjs.org/react");
             console.log(data);
             dispatch({
@@ -52,7 +51,7 @@ export const getPackageDetail = packageName => {
                 payload : data
             })
 
-            
+
         } catch (error) {
             dispatch({
                 type: 'GET_PACKAGES_ERROR',
@@ -70,13 +69,13 @@ export const searchPackages = (packageName, type, startDate = null ,endDate = nu
         dispatch({
             type: 'SEARCH_PACKAGES'
         })
-        
+
         try {
-            
+
             let tempData = null;
 
             console.log(type);
-            
+
             if(type === 'initial'){
                 const {data} = await axios.get('https://api.npmjs.org/downloads/range/last-week/'+packageName);
                 tempData = data.downloads;
@@ -99,7 +98,7 @@ export const searchPackages = (packageName, type, startDate = null ,endDate = nu
                 payload : tempData
             })
 
-            
+
         } catch (error) {
             dispatch({
                 type: 'SEARCH_PACKAGES_ERROR',
