@@ -4,6 +4,7 @@ import { HiX } from "react-icons/hi";
 import {useNavigate} from 'react-router-dom';
 import Typical from 'react-typical';
 import HelperField from './HelperField';
+import Footer from './subComponents/Footer';
 
 function SearchField() {
 
@@ -42,9 +43,27 @@ function SearchField() {
             <HelperField/>
             <main className="w-full h-full flex justify-center items-center">
                 <form className='w-3/5 flex justify-center items-center flex-col' onSubmit={(e)=>onSubmitHandler(e)}>
-                    <h1 className='header mb-10 text-default-text text-xl'>npmgo</h1>
+                    <span className='header-title mb-10 text-default-text'>npm
+                    <Typical
+                    loop={Infinity}
+                    wrapper="span"
+                    steps={[
+                        'go',
+                        1500,
+                        'search',
+                        1500,
+                        'find',
+                        1500
+                    ]}
+
+                    
+                    />
+                        
+                    
+                    
+                    </span>
                     <div className='flex w-3/5'>
-                        <div className='relative w-full'>
+                        <div className='input-area relative w-full'>
                             <input className='search-input bg-default-inputColor text-default-whitely py-2 px-4 w-full h-14 rounded-md [outline:0]' type="text" placeholder='Search for npm packages' onChange={(e)=>onChangeHandler(e.target)} required/>
                             {display && <span className='bg-default-inputColor absolute h-full p-2 right-0 inline-block rounded-tr-md rounded-br-md cursor-pointer' onClick={()=>onClickHandler()}><HiX className='h-full' size={'1.2rem'} color='white'/></span>}
                         </div>
@@ -52,11 +71,7 @@ function SearchField() {
                     </div>
                 </form>
             </main>
-
-            <div className="fixed bottom-2 copyright w-full pl-2 pr-14">
-                <hr className='border-default-sidebarColor'/>
-                <p className='text-center mt-2 text-default-whitely text-sm'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero, amet!</p>
-            </div>
+            <Footer/>
         </div>
         
     )

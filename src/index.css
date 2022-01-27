@@ -37,12 +37,59 @@
 }
 
 .radio__label > input:checked + .radio::before{
-
   transform: scale(1);
-
 }
 
-.header{
+.header-title{
   font-family: 'Press Start 2P', cursive;
   font-size: 3rem;
+}
+
+.header-title-sm{
+  font-family: 'Press Start 2P', cursive;
+}
+
+.header-title > span{
+  font-family: 'Press Start 2P', cursive;
+  font-size: 3rem;
+  color: #FD2155;
+}
+
+.header-title-sm > span{
+  font-family: 'Press Start 2P', cursive;
+  color: #FD2155;
+}
+
+.search-input{
+  box-shadow: rgba(230, 230, 230, 0.2) 0px 2px 8px 0px;
+}
+
+aside{
+  position: absolute;
+  width: 20rem;
+  height: 100vh;
+  background-color: black;
+  top: 0rem;
+  left: -20rem;
+  z-index: 11;
+  transition: all 200ms ease;
+}
+
+aside.active{
+  transform: translateX(20rem);
+}
+
+.overlay{
+
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  transform: scale(0);
+  transition: all 200ms ease;
+  z-index: 9;
+  /* background-image: linear-gradient(to left, rgba(255,0,0,0), rgba(255,0,0,1)); */
+}
+
+.overlay.active{
+  transform: scale(1);
 }
