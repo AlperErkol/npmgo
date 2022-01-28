@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import {useDispatch,useSelector} from 'react-redux';
 import searchRepositories from '../store/action-creators';
-import Header from './Header';
+import Header from './subComponents/Header';
 import { useState } from 'react';
 
 function Result() {
@@ -24,10 +24,9 @@ function Result() {
 
 
     useEffect(() => {
-        console.log('selam..');
         let historyList = JSON.parse(localStorage.getItem('history')) || [];
         // let index = historyList.indexOf(term);
-
+		console.log(data);
         if(historyList[historyList.length -1] !== params.term){
 
             if(params.term !== term){
@@ -40,21 +39,20 @@ function Result() {
 
     }, [params.term])
 
-
     return (
         <div>
             <Header/>
-            <div className='max-w-screen-md pl-40 pr-40 overflow-hidden'>
+            <div className='pt-20 max-w-screen-xl mx-auto overflow-hidden'>
                 {!error && !loading && data.map(repositories =>
-                <Link to={`/package/${repositories.package.name}`} state={{packageDetails : repositories}}>
-                    <div className='group relative mb-8 last:mb-0 py-4 flex justify-between flex-col cursor-pointer'>
+                <Link className='max-w-screen-sm block' to={`/package/${repositories.package.name}`} state={{packageDetails : repositories}}>
+                    <div className='group relative mb-8 last:mb-0 py-4 flex justify-between flex-col cursor-pointer w-full'>
                         <div className="flex items-center">
                             <div className="image w-5 h-5 bg-default-tertiary mr-2"></div>
                             <span className='text-sm text-default-text'>{repositories.package.publisher.username}</span>
                         </div>
                         <div>
                             <div className='flex items-center'>
-                                <p className='inline font-semibold text-lg text-default-whitely group-hover:underline group-hover:underline-offset-4 mr-4'>{repositories.package.name} | {repositories.package.version}</p>
+                                <p className='inline font-semibold text-lg text-default-whitely group-hover:underline group-hover:underline-offset-4 mr-4 mb-0'>{repositories.package.name} | {repositories.package.version}</p>
                                 {repositories.searchScore >= 10000 ? <span className='text-sm font-semibold text-default-text'>exact match</span> : null}
                             </div>
                             <span className='text-sm text-default-muted'>{repositories.package.description}</span>

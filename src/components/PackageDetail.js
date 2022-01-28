@@ -13,6 +13,11 @@ import {BarChart, Bar, Tooltip, Legend, XAxis, YAxis, ResponsiveContainer, Line,
 import Alert from './subComponents/Alert';
 import HelperField from './HelperField';
 
+import CustomTooltip from './subComponents/CustomTootip';
+
+
+
+
 function PackageDetail() {
 
     const location = useLocation();
@@ -22,19 +27,17 @@ function PackageDetail() {
     // const {loadingDetail, dataDetail, errorDetail} = useSelector(state => state.details);
     const params = useParams();
 
-
+	// General States
     const [scores,setScores] = useState(null);
     const [downloadCount, setDownloadCount] = useState([]);
     const [searchType, setSearchType] = useState('initial');
-
+	// Date States
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-
-
+	// Error States
     const [errorTo, setErrorTo] = useState(false);
     const [errorFrom, setErrorFrom] = useState(false);
-
-
+	const [errorRadio, setErrorRadio] = useState(false);
 
     const scoresTemp = [];
 
@@ -60,21 +63,6 @@ function PackageDetail() {
 
     }, [])
 
-
-    const getContent = label =>{
-
-        if(label === "maintenance"){
-            return 'Maintenance is about ...';
-        }
-        if(label === "quality"){
-            return "Quality is about ...";
-        }
-        if(label === "popularity"){
-            return "Popularity is about ...";
-        }
-
-    };
-
     const getDate = _ =>{
 
         let currentDate = new Date();
@@ -99,8 +87,6 @@ function PackageDetail() {
 
     const onChangeHandler = e =>{
 
-
-
         if(e.target.value === ""){
 
             if(searchType !== 'single'){
@@ -112,12 +98,15 @@ function PackageDetail() {
 
             if(e.target.id === "startDate"){
                 setStartDate(e.target.value);
+				setErrorFrom(false);
             }else if (e.target.id === "endDate"){
                 setEndDate(e.target.value);
-            }
+				setErrorTo(false);
+			}
 
 
-            if(searchType !== 'single'){
+            if(searchType !== 'single' && e.target.id !== "endDate"){
+				console.log('richie..');
                 let chosenDate = e.target.value;
                 let threshold = new Date(chosenDate);
                 threshold.setDate(threshold.getDate() + 1);
@@ -129,43 +118,64 @@ function PackageDetail() {
         }
     };
 
-    const onClickHandler = _ =>{
+    const onSubmitHandler = e =>{
 
-        console.log(searchType);
+		e.preventDefault();
 
-
-        if(searchType === "single"){
-            dispatch(searchPackages(params.packageName,searchType,startDate));
-        }
-        else if (searchType === "multiple"){
-            dispatch(searchPackages(params.packageName,searchType,startDate,endDate));
-        }
-
+		if(handleValidity()){
+			if(searchType === "single"){
+				dispatch(searchPackages(params.packageName,searchType,startDate));
+				setStartDate("");
+			}
+			else if (searchType === "multiple"){
+				dispatch(searchPackages(params.packageName,searchType,startDate,endDate));
+				setStartDate("");
+				setEndDate("");
+			}
+		}
 
     };
 
-    const onChangeHandlerRadio = e =>{
+	const onChangeHandlerRadio = e =>{
         setSearchType(e.target.id);
+		setErrorRadio(false);
     };
 
-    const CustomTooltip = ({ active, payload, label }) => {
-        if (active && payload && payload.length) {
-            return (
-            <div className="custom-tooltip bg-default-sidebarColor p-4">
-                <p className="label text-default-whitely">{`${label} : ${payload[0].value.toFixed(2)} (${payload[0].value.toFixed(2)*100}%)`}</p>
-                <p className="desc text-default-whitely">{getContent(label)}</p>
-            </div>
-            );
-        }
-        return null;
-    };
+	const handleValidity = _ =>{
 
+		if(searchType === "initial"){
+			setErrorRadio(true);
+			return false;
+		}else if(searchType === "single"){
+			if(startDate === ""){
+				setErrorFrom(true);
+				return false;
+			}
+			return true;
+		}else if(searchType === "multiple"){
+			if(startDate === ""){
+				setErrorFrom(true);
+				return false;
+			}
+			if(endDate === ""){
+				setErrorTo(true);
+				return false;
+			}
+
+			setErrorFrom(false);
+			setErrorTo(false);
+			setErrorRadio(false);
+			return true;
+
+		}
+
+	};
 
     return (
 
-        <div className='pl-20 py-12 pr-36'>
+        <div className='max-w-screen-xl my-0 mx-auto py-12'>
 			<HelperField/>
-            <div className='mt-3 mb-3 flex justify-between border-b-2 border-default-muted h-20'>
+            <div className='mt-4 mb-3 flex justify-between border-b-2 border-default-muted h-20'>
                 <div>
                     <h1 className='inline text-5xl text-default-text mr-2'>{packageDetail.package.name}</h1>
                     <span className='text-default-text'>by {packageDetail.package.publisher.username}</span>
@@ -249,52 +259,56 @@ function PackageDetail() {
                         <div className='border-l-8 pl-2 border-default-secondary'>
                             <h3 className='text-lg font-bold text-default-whitely'>Download Count</h3>
                         </div>
-                        <p className='text-sm font-semibold p-1 text-default-text'>You can see download count of <b className='text-default-tertiary'>{params.packageName}</b> by adjusting settings. Default, download count of yesterday shown below.</p>
+                        <p className='text-sm font-semibold p-1 text-default-text'>You can see download count of <b className='text-default-tertiary'>{params.packageName}</b> by adjusting settings. Default, download count of last week shown below.</p>
 
                     </div>
-                    <div className="search-type text-default-text text-sm font-semibold mb-4">
-                        <label className='radio__label flex items-center mb-2' htmlFor="single">
-                            <input className='mr-2' type="radio" name="type" id="single" onChange={(e)=>onChangeHandlerRadio(e)} />
-                            <div className="radio"></div>
-                            Single Day
-                        </label>
+                    <form onSubmit={(e)=>onSubmitHandler(e)}>
+						<div className="search-type text-default-text text-sm font-semibold mb-4">
+							{errorRadio && errorRadio && <div className="mb-4">
+								<Alert message={"You must choose search type."}/>
+							</div>}
+							<label className='radio__label flex items-center mb-2' htmlFor="single">
+								<input className='mr-2' type="radio" name="type" id="single" onChange={(e)=>onChangeHandlerRadio(e)}  />
+								<div className="radio"></div>
+								Single Day
+							</label>
 
-                        <label className='radio__label flex items-center' htmlFor="multiple">
-                            <input className='mr-2' type="radio" name="type" id="multiple" onChange={(e)=>onChangeHandlerRadio(e)} />
-                            <div className="radio"></div>
-                            Day Interval
-                        </label>
+							<label className='radio__label flex items-center' htmlFor="multiple">
+								<input className='mr-2' type="radio" name="type" id="multiple" onChange={(e)=>onChangeHandlerRadio(e)}  />
+								<div className="radio"></div>
+								Day Interval
+							</label>
 
-                    </div>
+						</div>
 
-                    <div className="right-header flex mb-8 items-end">
-                        {searchType && (searchType === 'initial' || searchType === 'multiple' )&&
-                        <div className='flex flex-1'>
-                            <div className='flex flex-col flex-1 mr-2'>
-                                <span className='text-default-text mb-3'>from 🕒 {errorFrom && errorFrom && <Alert message={"Please select a date!"}/>} </span>
-                                <input className='w-full h-8' type="date" id="startDate" onChange={(e)=>onChangeHandler(e)} />
+						<div className="right-header flex mb-8 items-end">
+							{searchType && (searchType === 'initial' || searchType === 'multiple' )&&
+							<div className='flex flex-1'>
+								<div className='flex flex-col flex-1 mr-2'>
+									<span className='text-default-text mb-3'>from 🕒 {errorFrom && errorFrom && <Alert message={"Please select a date!"}/>} </span>
+									<input className='w-full h-8' type="date" id="startDate" onChange={(e)=>onChangeHandler(e)} />
 
-                            </div>
-                            <div className='flex flex-col flex-1 mr-2'>
-                                <span className='text-default-text mb-3'>to 🕕 {errorTo && !errorTo && <Alert message={"Please select a date!"}/>} </span>
-                                <input className='w-full h-8' type="date" id="endDate" onChange={(e)=>onChangeHandler(e)} />
+								</div>
+								<div className='flex flex-col flex-1 mr-2'>
+									<span className='text-default-text mb-3'>to 🕕 {errorTo && errorTo && <Alert message={"Please select a date!"}/>} </span>
+									<input className='w-full h-8' type="date" id="endDate" onChange={(e)=>onChangeHandler(e)} />
 
-                            </div>
-                        </div>
-                        }
-                        {
-                            searchType && searchType === 'single' &&
-                            <div className='flex flex-col flex-1 mr-2'>
-                                <span className='text-default-text mb-3'>date 🕒 {errorFrom && errorFrom && <Alert message={"Please select a date!"}/>} </span>
-                                <input className='w-full h-8' type="date" id="startDate" onChange={(e)=>onChangeHandler(e)} />
-                            </div>
-                        }
-                        <button
-                            onClick={()=>onClickHandler()}
-                            className='group w-12 h-8 flex items-center justify-center border-solid border-2 border-default-text hover:bg-default-text ease-in duration-100'>
-                            <MdKeyboardArrowRight size={24} className='text-default-text group-hover:text-default-inputColor'/>
-                        </button>
-                    </div>
+								</div>
+							</div>
+							}
+							{
+								searchType && searchType === 'single' &&
+								<div className='flex flex-col flex-1 mr-2'>
+									<span className='text-default-text mb-3'>date 🕒 {errorFrom && errorFrom && <Alert message={"Please select a date!"}/>} </span>
+									<input className='w-full h-8' type="date" id="startDate" onChange={(e)=>onChangeHandler(e)} />
+								</div>
+							}
+							<button
+								className='group w-12 h-8 flex items-center justify-center border-solid border-2 border-default-text hover:bg-default-text ease-in duration-100'>
+								<MdKeyboardArrowRight size={24} className='text-default-text group-hover:text-default-inputColor'/>
+							</button>
+						</div>
+					</form>
                     <div className="chart w-full h-96">
                         { !loading && data && downloadCount && <ResponsiveContainer width="100%" height="100%">
                             <LineChart

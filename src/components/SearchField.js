@@ -53,14 +53,10 @@ function SearchField() {
                         'search',
                         1500,
                         'find',
-                        1500
+                        1500,
+
                     ]}
-
-
                     />
-
-
-
                     </span>
                     <div className='flex w-3/5'>
                         <div className='input-area relative w-full'>

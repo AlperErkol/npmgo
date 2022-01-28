@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Modal, Button } from 'antd';
+import { FaTimes } from "react-icons/fa";
+
 
 function HistoryModal({show, closeModal}) {
 
@@ -38,7 +40,7 @@ function HistoryModal({show, closeModal}) {
 
 
   return (
-	<Modal title="Search History" visible={show} onCancel={closeModal} footer={[
+	<Modal className='modal' title="Search History" visible={show} onCancel={closeModal} footer={[
 		<Button onClick={clearAll}>Clear All</Button>,
 		<Button onClick={closeModal}>OK</Button>,
 
@@ -50,9 +52,9 @@ function HistoryModal({show, closeModal}) {
 		</p>}
 		{history && history.map(item => {
 			return (
-				<div key={item}  onClick={()=>deleteItem(item)}  className='history-item group flex justify-between items-start p-2 mb-2 bg-default-inputColor text-default-text rounded-lg cursor-pointer'>
+				<div key={item}  onClick={()=>deleteItem(item)}  className='history-item group flex justify-between items-center p-2 mb-2 bg-default-inputColor text-default-text rounded-lg cursor-pointer'>
 					<span>{item}</span>
-					<span className='group-hover:text-default-tertiary'>X</span>
+					<FaTimes className='group-hover:text-default-tertiary' />
 				</div>
 			)
 		} )}
