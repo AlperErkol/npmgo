@@ -12,6 +12,8 @@ function Result() {
     const [term, setTerm] = useState("");
     const {loading,data,error} = useSelector(state => state.repositories);
 
+    const skeletonElements = [1,2,3,4];
+
     const addToHistory = (term) =>{
         let historyList = JSON.parse(localStorage.getItem('history')) || [];
         let index = historyList.indexOf(term);
@@ -47,7 +49,7 @@ function Result() {
                 <Link className='max-w-screen-sm block' to={`/package/${repositories.package.name}`} state={{packageDetails : repositories}}>
                     <div className='group relative mb-8 last:mb-0 py-4 flex justify-between flex-col cursor-pointer w-full'>
                         <div className="flex items-center">
-                            <div className="image w-5 h-5 bg-default-tertiary mr-2"></div>
+                            <div className="image w-5 h-5 bg-default-tertiary rounded-full mr-2"></div>
                             <span className='text-sm text-default-text'>{repositories.package.publisher.username}</span>
                         </div>
                         <div>
@@ -67,24 +69,33 @@ function Result() {
                     </div>
                 </Link>
                 )}
-                { loading &&
-                <div className="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
-                    <div className="animate-pulse flex space-x-4">
-                    <div className="rounded-full bg-slate-700 h-10 w-10"></div>
-                    <div className="flex-1 space-y-6 py-1">
-                        <div className="h-2 bg-slate-700 rounded"></div>
-                        <div className="space-y-3">
-                        <div className="grid grid-cols-3 gap-4">
-                            <div className="h-2 bg-slate-700 rounded col-span-2"></div>
-                            <div className="h-2 bg-slate-700 rounded col-span-1"></div>
-                        </div>
-                        <div className="h-2 bg-slate-700 rounded"></div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                }
 
+                {!error && !loading && data.length ? 0 : <p className='text-default-text'>BOŞŞŞ</p>}
+                
+                {loading && skeletonElements.map(elem => 
+                    <div className='max-w-screen-sm  rounded-md p-4'>
+                        <div className='group relative mb-8 last:mb-0 py-4 flex justify-between flex-col cursor-pointer w-full animate-pulse'>
+                            <div className="flex items-center mb-2">
+                                <div className="image w-5 h-5 bg-default-muted rounded-full mr-2"></div>
+                                <span className='text-sm bg-default-muted w-48 h-2 rounded-lg'></span>
+                            </div>
+                            <div>
+                                <div className='flex items-center mb-2'>
+                                    <p className='inline font-semibold text-lg bg-default-muted w-48 h-2 rounded-lg mr-4 mb-0'></p>
+                                </div>
+                                <span className='text-sm block bg-default-muted w-56 h-2 rounded-lg'></span>
+                                <ul className="keywords mt-2">
+                                    
+                                    <li className='text-sm inline-block py-1 px-2 mr-2 mb-2 bg-default-muted w-14 h-6  rounded'></li>
+                                    <li className='text-sm inline-block py-1 px-2 mr-2 mb-2 bg-default-muted w-14 h-6 rounded'></li>
+                                    <li className='text-sm inline-block py-1 px-2 mr-2 mb-2 bg-default-muted w-14 h-6 rounded'></li>
+                                    <li className='text-sm inline-block py-1 px-2 mr-2 mb-2 bg-default-muted w-14 h-6 rounded'></li>
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     )
