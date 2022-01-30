@@ -70,7 +70,18 @@ function Result() {
                 </Link>
                 )}
 
-                {!error && !loading && data.length ? 0 : <p className='text-default-text'>BOŞŞŞ</p>}
+                {(!error && !loading && data.length < 1) ? 
+                <div className='w-full flex flex-col items-center justify-center mt-4'>
+                    <div className='p-4 bg-default-sidebarColor text-center'>
+                        <p className='text-default-text text-xl'>No result for <span className='text-default-tertiary'>{params.term}</span>.</p>
+                        <div>
+                            <span className='emoji'>&#128531;</span>
+                            <span className='emoji'>&#128534;</span>
+                            <span className='emoji'>&#128529;</span>
+                        </div>
+                    </div>
+                </div>
+                : <></>}
                 
                 {loading && skeletonElements.map(elem => 
                     <div className='max-w-screen-sm  rounded-md p-4'>

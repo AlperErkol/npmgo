@@ -65,7 +65,7 @@ function Header() {
 						<form className='w-full' onSubmit={(e)=>onSubmitHandler(e)}>
 							<div className='relative inline'>
 								<input className='search-input bg-default-inputColor text-default-whitely py-2 px-4 rounded-md [outline:0] w-full' type="text" placeholder='Search for npm packages' onChange={(e)=>onChangeHandler(e.target)}/>
-								{display && <span className='bg-default-inputColor absolute h-full p-1 right-0 inline-block rounded-tr-md rounded-br-md cursor-pointer' onClick={()=>onClickHandler()}><HiX className='h-full' size={'1.2rem'} color='white'/></span>}
+								{display && <span className='bg-default-inputColor absolute h-full p-1 right-0 top-0 bottom-0 inline-block rounded-tr-md rounded-br-md cursor-pointer' onClick={()=>onClickHandler()}><HiX className='h-full' size={'1.2rem'} color='white'/></span>}
 							</div>
 						</form>
 					</div>

@@ -136,3 +136,7 @@ aside.active{
 .ant-modal-title{
 	color: white !important;
 }
+
+.emoji{
+  font-size: 3rem;
+}
