@@ -5,20 +5,20 @@ module.exports = {
     extend: {},
     colors: {
       default: {
-        primary: '#212121',
-        secondary: '#08fdd8',
-        tertiary: '#FD2155',
-        text: '#fff',
-        muted : '#919191',
-        success : '#4BB543',
-        errorArea : '#FDEDED',
-        errorText : '#5F2120',
-        inputColor : '#363636',
-        sidebarColor : '#161616',
-        whitely : '#EBDFCA',
-        buttonHover : '#047E6C',
+        primary: 'var(--color-bg-primary)',
+        secondary: 'var(--color-bg-secondary)',
+        tertiary: 'var(--color-bg-tertiary)',
+        text: 'var(--color-text-primary)',
+        muted : 'var(--color-text-muted)',
+        success : 'var(--color-text-success)',
+        errorArea : 'var(--color-bg-error)',
+        errorText : 'var(--color-text-error)',
+        inputColor : 'var(--color-bg-input)',
+        sidebarColor : 'var(--color-bg-sidebar)',
+        whitely : 'var(--color-text-whitely)',
+        buttonHover : 'var(--color-hover-button)',
       },
-      
+
     }
   },
   variants: {

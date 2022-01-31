@@ -5,11 +5,14 @@ import App from './App';
 
 import {Provider} from 'react-redux';
 import {store} from './store/store';
+import { ThemeProvider } from './ThemeContext';
 
 
 ReactDOM.render(
   <Provider store = {store}>
-    <App />
+    <ThemeProvider>
+		<App />
+	</ThemeProvider>
   </Provider>,
   document.getElementById('root')
 );

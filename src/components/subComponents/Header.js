@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import { HiX } from "react-icons/hi";
+import React, {useState, useEffect} from 'react'
+import { HiX, HiOutlineSearch} from "react-icons/hi";
 // import {useDispatch,useSelector} from 'react-redux';
 import {useNavigate, Link} from 'react-router-dom';
 import { HiMenuAlt1} from "react-icons/hi";
@@ -15,8 +15,9 @@ function Header() {
     let navigate = useNavigate();
 
     const [display, setDisplay] = useState(false)
-
     const [term, setTerm] = useState("");
+	const [scrolled, setScrolled] = useState(false);
+	const [visible, setVisible] = useState(false);
 
     const onChangeHandler = e=>{
 
@@ -43,8 +44,6 @@ function Header() {
         navigate(`/query/${term}`);
     }
 
-	const [visible, setVisible] = useState(false);
-
     const hamburgerOnClickHandler = _ =>{
         if(!visible){
             setVisible(true);
@@ -54,25 +53,42 @@ function Header() {
 
     };
 
+	const onScrollHandler = _ =>{
+
+        if(window.scrollY > 1){
+            setScrolled(true);
+        }else if (window.scrollY === 0){
+            setScrolled(false);
+        }
+
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll',onScrollHandler);
+    }, []);
+
     return (
 		<>
-			<header className='fixed z-10 header bg-default-sidebarColor w-full mb-4 py-4'>
+			<header className={scrolled ? 'fixed z-10 header bg-default-sidebarColor w-full mb-4 py-4 duration-300' : 'fixed z-10 header w-full mb-4 py-4 duration-300'}>
 				<div className="inner-header max-w-screen-xl mx-auto flex justify-between items-center">
 					<Link className='header-title-result items-center h-full' to={'/'}>
 						<span className='header-title-sm text-default-text'>npm<span>go</span></span>
 					</Link>
 					<div className='search-bar flex items-center justify-between'>
 						<form className='w-full' onSubmit={(e)=>onSubmitHandler(e)}>
-							<div className='relative inline'>
-								<input className='search-input bg-default-inputColor text-default-whitely py-2 px-4 rounded-md [outline:0] w-full' type="text" placeholder='Search for npm packages' onChange={(e)=>onChangeHandler(e.target)}/>
-								{display && <span className='bg-default-inputColor absolute h-full p-1 right-0 top-0 bottom-0 inline-block rounded-tr-md rounded-br-md cursor-pointer' onClick={()=>onClickHandler()}><HiX className='h-full' size={'1.2rem'} color='white'/></span>}
+							<div className='input-container input-area flex w-full bg-default-inputColor rounded-md'>
+								<div className='w-full h-full relative flex-1 px-2 py-1'>
+									<input className='bg-default-inputColor text-default-text search-input w-full h-8' type="text" placeholder='Search for npm packages' onChange={(e)=>onChangeHandler(e.target)}/>
+									{display && display && <span className='flex justify-center absolute top-0 right-0 w-8 h-full' onClick={()=>onClickHandler()}><HiX className='text-default-text cross-icon h-full'/></span>}
+								</div>
+								<button className='w-12'><HiOutlineSearch className='text-default-text search-icon w-full'/></button>
 							</div>
 						</form>
 					</div>
 					<div className='social-bar flex justify-end'>
-							<HiMenuAlt1 onClick={()=>hamburgerOnClickHandler()} className=' cursor-pointer mr-8' size={'1.5rem'} color='white' />
+							<HiMenuAlt1 onClick={()=>hamburgerOnClickHandler()} className='text-default-text cursor-pointer mr-8' size={'1.5rem'} />
 							<Dropdown overlay={DropdownMenu} trigger={['click']} placement='bottomCenter'>
-									<IoShareSocial className='cursor-pointer' size={'1.5rem'} color='white'/>
+									<IoShareSocial className='text-default-text cursor-pointer' size={'1.5rem'}/>
 							</Dropdown>
 					</div>
 				</div>

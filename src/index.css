@@ -1,9 +1,49 @@
+:root{
+	@apply light;
+}
+
+.dark{
+	--color-bg-primary : #212121;
+	--color-bg-secondary : #08FDD8;
+	--color-bg-tertiary : #FD2155;
+	--color-bg-input : #363636;
+	--color-bg-sidebar : #161616;
+	--color-bg-error : #FDEDED;
+	--color-text-primary : #FFFFFF;
+	--color-text-muted : #919191;
+	--color-text-success : #4BB543;
+	--color-text-error : #5F2120;
+	--color-text-whitely : #EBDFCA;
+	--color-hover-button : #047E6C;
+}
+
+.light{
+	--color-bg-primary : #F0F0F0;
+	--color-bg-secondary : #08FDD8;
+	--color-bg-tertiary : #FD2155;
+	--color-bg-input : #FFFFFF;
+	--color-bg-sidebar : #d3d3d3;
+	--color-bg-error : #FDEDED;
+	--color-text-primary : #161616;
+	--color-text-muted : #919191;
+	--color-text-success : #4BB543;
+	--color-text-error : #5F2120;
+	--color-text-whitely : #000000;
+	--color-hover-button: #047E6C;
+}
+
+
+
+
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 *{
   margin: 0;
   padding: 0;
@@ -11,6 +51,10 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   font-family: 'Roboto Mono', monospace;
+}
+
+input{
+	outline: none !important;
 }
 
 html,body{
@@ -66,15 +110,24 @@ html,body{
   color: #FD2155;
 }
 
-.search-input{
-  box-shadow: rgba(230, 230, 230, 0.2) 0px 2px 8px 0px;
+.input-container{
+	box-shadow: 0px 0px 4px 3px rgba(0, 0, 0, 0.3);
+	transition: all 200ms ease;
+}
+
+/* .input-container:has(.search-input:focus){
+	box-shadow: 0px 0px 4px 3px rgba(0, 0, 0, 0.8);
+} */
+
+.search-icon,.cross-icon{
+	transform: scale(1.4);
+
 }
 
 aside{
   position: fixed;
   width: 20rem;
   height: 100vh;
-  background-color: black;
   top: 0rem;
   left: -20rem;
   z-index: 20;
@@ -83,6 +136,7 @@ aside{
 
 aside.active{
   transform: translateX(20rem);
+  box-shadow: 5px 0px 15px 3px rgba(0, 0, 0, 0.5);
 }
 
 .overlay{
