@@ -22,7 +22,6 @@ function Header() {
     const onChangeHandler = e=>{
 
         setTerm(e.value);
-        console.log(display);
 
         if(e.value !== ""){
             setDisplay(true);

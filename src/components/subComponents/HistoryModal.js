@@ -9,7 +9,6 @@ function HistoryModal({show, closeModal}) {
 
 	useEffect(() => {
 		setHistory(JSON.parse(localStorage.getItem('history')));
-		console.log('ALPERALPER');
 	}, []);
 
 

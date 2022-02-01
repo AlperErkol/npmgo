@@ -23,7 +23,7 @@ function PackageDetail() {
     const location = useLocation();
     const dispatch = useDispatch();
     const packageDetail = location.state.packageDetails;
-    const {loading,data,error} = useSelector(state => state.packages);
+    const {loading,data} = useSelector(state => state.packages);
     // const {loadingDetail, dataDetail, errorDetail} = useSelector(state => state.details);
     const params = useParams();
 
@@ -41,14 +41,15 @@ function PackageDetail() {
 
     const scoresTemp = [];
 
+
     useEffect(() => {
 
         // dispatch(getPackageDetail(params.packageName,searchType));
         dispatch(searchPackages(params.packageName,searchType));
 
-
+		// Map
         let scoreItem = {};
-        Object.keys(packageDetail.score.detail).map(key => {
+        Object.keys(packageDetail.score.detail).forEach(key => {
             scoreItem.name = key;
             scoreItem.value = packageDetail.score.detail[key];
             scoresTemp.push(scoreItem);
@@ -60,10 +61,9 @@ function PackageDetail() {
 
         setDownloadCount(data);
 
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    }, [])
-
-    const getDate = _ =>{
+	const getDate = _ =>{
 
         let currentDate = new Date();
         let date = new Date(packageDetail.package.date);
@@ -85,7 +85,10 @@ function PackageDetail() {
 
     };
 
-    const onChangeHandler = e =>{
+
+
+
+	const onChangeHandler = e =>{
 
         if(e.target.value === ""){
 
@@ -106,7 +109,6 @@ function PackageDetail() {
 
 
             if(searchType !== 'single' && e.target.id !== "endDate"){
-				console.log('richie..');
                 let chosenDate = e.target.value;
                 let threshold = new Date(chosenDate);
                 threshold.setDate(threshold.getDate() + 1);
@@ -215,7 +217,7 @@ function PackageDetail() {
                         </div>
                         <ul className="keywords mt-2">
                                 {packageDetail.package.keywords && packageDetail.package.keywords.map(keyword =>
-                                    <li className='text-sm inline-block py-1 px-2 mr-2 mb-2 bg-default-tertiary text-default-whitely rounded'>{keyword}</li>
+                                    <li key={keyword} className='text-sm inline-block py-1 px-2 mr-2 mb-2 bg-default-tertiary text-default-whitely rounded'>{keyword}</li>
                                 )}
                         </ul>
                     </div>
@@ -243,7 +245,7 @@ function PackageDetail() {
                         </div>
                         {Object.keys(packageDetail.package.links).map(key => {
                             return(
-                                <div className='py-1'>
+                                <div key={key} className='py-1'>
                                     <a className='text-sm font-semibold text-default-text inline-flex items-center' href={packageDetail.package.links[key]} target="_blank" rel='noreferrer'>
                                         {key}
                                         <GoLinkExternal className='ml-1'/>

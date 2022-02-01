@@ -45,7 +45,6 @@ export const getPackageDetail = packageName => {
 
 
             const {data} = await axios.get("https://registry.npmjs.org/react");
-            console.log(data);
             dispatch({
                 type: 'GET_PACKAGES_SUCCESS',
                 payload : data
@@ -74,7 +73,6 @@ export const searchPackages = (packageName, type, startDate = null ,endDate = nu
 
             let tempData = null;
 
-            console.log(type);
 
             if(type === 'initial'){
                 const {data} = await axios.get('https://api.npmjs.org/downloads/range/last-week/'+packageName);
@@ -90,8 +88,6 @@ export const searchPackages = (packageName, type, startDate = null ,endDate = nu
                 const {data} = await axios.get(`https://api.npmjs.org/downloads/range/${startDate}:${endDate}/${packageName}`);
                 tempData = data.downloads;
             }
-            console.log('alpererkol');
-            console.log(tempData);
 
             dispatch({
                 type: 'SEARCH_PACKAGES_SUCCESS',

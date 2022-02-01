@@ -28,25 +28,21 @@ function Result() {
     useEffect(() => {
         let historyList = JSON.parse(localStorage.getItem('history')) || [];
         // let index = historyList.indexOf(term);
-		console.log(data);
         if(historyList[historyList.length -1] !== params.term){
-
             if(params.term !== term){
                 dispatch(searchRepositories(params.term));
                 setTerm(params.term);
                 addToHistory(params.term);
             }
-
         }
-
-    }, [params.term])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div>
             <Header/>
             <div className='pt-20 max-w-screen-xl mx-auto overflow-hidden'>
                 {!error && !loading && data.map(repositories =>
-                <Link className='max-w-screen-sm block' to={`/package/${repositories.package.name}`} state={{packageDetails : repositories}}>
+                <Link key={repositories.package.name} className='max-w-screen-sm block' to={`/package/${repositories.package.name}`} state={{packageDetails : repositories}}>
                     <div className='group relative mb-8 last:mb-0 py-4 flex justify-between flex-col cursor-pointer w-full'>
                         <div className="flex items-center">
                             <div className="image w-5 h-5 bg-default-tertiary rounded-full mr-2"></div>
@@ -70,7 +66,7 @@ function Result() {
                 </Link>
                 )}
 
-                {(!error && !loading && data.length < 1) ? 
+                {(!error && !loading && data.length < 1) ?
                 <div className='w-full flex flex-col items-center justify-center mt-4'>
                     <div className='p-4 bg-default-sidebarColor text-center'>
                         <p className='text-default-text text-xl'>No result for <span className='text-default-tertiary'>{params.term}</span>.</p>
@@ -82,8 +78,8 @@ function Result() {
                     </div>
                 </div>
                 : <></>}
-                
-                {loading && skeletonElements.map(elem => 
+
+                {loading && skeletonElements.map(elem =>
                     <div className='max-w-screen-sm  rounded-md p-4'>
                         <div className='group relative mb-8 last:mb-0 py-4 flex justify-between flex-col cursor-pointer w-full animate-pulse'>
                             <div className="flex items-center mb-2">
@@ -96,12 +92,12 @@ function Result() {
                                 </div>
                                 <span className='text-sm block bg-default-muted w-56 h-2 rounded-lg'></span>
                                 <ul className="keywords mt-2">
-                                    
+
                                     <li className='text-sm inline-block py-1 px-2 mr-2 mb-2 bg-default-muted w-14 h-6  rounded'></li>
                                     <li className='text-sm inline-block py-1 px-2 mr-2 mb-2 bg-default-muted w-14 h-6 rounded'></li>
                                     <li className='text-sm inline-block py-1 px-2 mr-2 mb-2 bg-default-muted w-14 h-6 rounded'></li>
                                     <li className='text-sm inline-block py-1 px-2 mr-2 mb-2 bg-default-muted w-14 h-6 rounded'></li>
-                                    
+
                                 </ul>
                             </div>
                         </div>

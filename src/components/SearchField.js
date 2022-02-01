@@ -22,8 +22,6 @@ function SearchField() {
 
         setTerm(e.value);
 
-		console.log(e.value);
-
         if(e.value !== ""){
             setDisplay(true);
         }
