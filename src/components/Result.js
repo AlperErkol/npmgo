@@ -35,7 +35,7 @@ function Result() {
                 addToHistory(params.term);
             }
         }
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [params.term]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div>
@@ -56,9 +56,7 @@ function Result() {
                             <span className='text-sm text-default-muted'>{repositories.package.description}</span>
                             <ul className="keywords mt-2">
                                 {repositories.package.keywords && repositories.package.keywords.map(keyword =>
-                                    <li className='text-sm inline-block py-1 px-2 mr-2 mb-2 bg-default-tertiary text-default-whitely rounded'>{keyword}</li>
-
-
+                                    <li key={keyword} className='text-sm inline-block py-1 px-2 mr-2 mb-2 bg-default-tertiary text-default-whitely rounded'>{keyword}</li>
                                 )}
                             </ul>
                         </div>
@@ -80,7 +78,7 @@ function Result() {
                 : <></>}
 
                 {loading && skeletonElements.map(elem =>
-                    <div className='max-w-screen-sm  rounded-md p-4'>
+                    <div key={elem} className='max-w-screen-sm  rounded-md p-4'>
                         <div className='group relative mb-8 last:mb-0 py-4 flex justify-between flex-col cursor-pointer w-full animate-pulse'>
                             <div className="flex items-center mb-2">
                                 <div className="image w-5 h-5 bg-default-muted rounded-full mr-2"></div>
