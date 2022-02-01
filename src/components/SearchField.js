@@ -2,7 +2,6 @@ import React from 'react'
 import {useState} from 'react'
 import { HiX, HiOutlineSearch} from "react-icons/hi";
 import {useNavigate} from 'react-router-dom';
-import Typical from 'react-typical';
 import HelperField from './HelperField';
 import Footer from './subComponents/Footer';
 
@@ -44,19 +43,7 @@ function SearchField() {
             <main className="w-full h-full flex justify-center items-center">
                 <form className='w-3/5 flex justify-center items-center flex-col' onSubmit={(e)=>onSubmitHandler(e)}>
                     <span className='header-title mb-10 text-default-text'>npm
-                    <Typical
-                    loop={Infinity}
-                    wrapper="span"
-                    steps={[
-                        'go',
-                        1500,
-                        'search',
-                        1500,
-                        'find',
-                        1500,
-
-                    ]}
-                    />
+					<span>go</span>
                     </span>
                     <div className='flex w-3/5'>
                         <div className='input-container input-area flex w-full bg-default-inputColor rounded-md'>
