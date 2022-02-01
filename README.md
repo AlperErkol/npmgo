@@ -2,7 +2,7 @@
 
 ### <ins>Introduction</ins>
 NPMGO is a npm package search engine.
-** There is no responsive support. **
+**There is no responsive support.**
 
 ### <ins>Tech Stack</ins>
 * React
