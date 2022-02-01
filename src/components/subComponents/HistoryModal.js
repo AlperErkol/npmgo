@@ -41,8 +41,8 @@ function HistoryModal({show, closeModal}) {
 
   return (
 	<Modal className='modal' title="Search History" visible={show} onCancel={closeModal} footer={[
-		<Button onClick={clearAll}>Clear All</Button>,
-		<Button onClick={closeModal}>OK</Button>,
+		<Button className='custom-btn' onClick={clearAll}>Clear All</Button>,
+		<Button className='custom-btn' onClick={closeModal}>OK</Button>,
 
 	]}>
 		{history && history.length > 0 ? <p className='font-bold'>

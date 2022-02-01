@@ -179,18 +179,31 @@ aside.active{
 	flex:1;
 }
 
-.ant-modal-content{
+
+.dark .ant-modal-content{
 	background-color: black !important;
 	color: white !important;
 }
-.ant-modal-header{
+.dark .ant-modal-header{
 	background-color: black !important;
+	border-bottom: 1px solid #303030;
 }
-
-.ant-modal-title{
+.dark .ant-modal-title{
 	color: white !important;
 }
-
+.dark .ant-modal-footer{
+	border-top: 1px solid #303030;
+}
 .emoji{
   font-size: 3rem;
+}
+.dark .ant-btn{
+	border: 1px solid white !important;
+	color: white !important;
+	background-color: black !important;
+	transition: all 100ms ease;
+}
+.dark .ant-btn:hover{
+	color: black !important;
+	background-color: white !important;
 }
